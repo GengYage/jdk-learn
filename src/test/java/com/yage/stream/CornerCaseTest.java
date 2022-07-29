@@ -3,6 +3,7 @@ package com.yage.stream;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -49,5 +50,17 @@ public class CornerCaseTest {
                     }
                     System.out.print("\n");
                 });
+    }
+
+    @Test
+    public void reduceTest() {
+        Stream<Integer> intStream = Stream.of(1, 2, 3, 4);
+        // 点进源码看
+        Optional<Integer> reduce = intStream.reduce((x, y) -> {
+            System.out.printf("x:%d ,y%d\n", x, y);
+            return x + y;
+        });
+
+        reduce.ifPresent(sum -> System.out.printf("sum = %d\n", sum));
     }
 }
