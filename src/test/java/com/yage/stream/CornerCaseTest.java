@@ -3,7 +3,10 @@ package com.yage.stream;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -62,5 +65,24 @@ public class CornerCaseTest {
         });
 
         reduce.ifPresent(sum -> System.out.printf("sum = %d\n", sum));
+    }
+
+    @Test
+    public void groupByVsPartitioningByTest() {
+        Stream<Integer> intStream = Stream.of(1, -1, 2, -2, 3, -3, 4, -4);
+        // 根据条件分区
+        Map<Boolean, List<Integer>> partition = intStream.collect(Collectors.partitioningBy(a -> a > 0));
+        partition.forEach((key, value) -> {
+            System.out.printf("key: %s, value: %s\n", key, Arrays.toString(value.toArray()));
+        });
+
+        System.out.println("======");
+        Stream<Integer> intGroupByStream = Stream.of(1, 1, 2, 2, 3, 3, 4, 4);
+        // 根据字段分组
+        Map<Integer, List<Integer>> group = intGroupByStream.collect(Collectors.groupingBy(a -> a));
+        group.forEach((key, value) -> {
+            System.out.printf("key: %s, value: %s\n", key, Arrays.toString(value.toArray()));
+        });
+
     }
 }
