@@ -64,16 +64,23 @@ public class ReferenceChain<R, Out> {
         return this;
     }
 
-    public void forEach(Collection<R> collection, Sink<R> consumer) {
+    public void forEach(Collection<R> collection, Sink<R> consumer, boolean reverse) {
         Spliterator<R> spliterator = collection.spliterator();
         sinkReference.set(consumer);
         Sink<R> stage = consumer;
 
-        // 构建链
-        for (int i = sinkBuilders.size() - 1; i >= 0; i--) {
-            Supplier<Sink<R>> supplier = sinkBuilders.get(i);
-            // 执行get方法才会出发链的构建
-            stage = supplier.get();
+        // 正向构建，反向执行链
+        if (reverse) {
+            for (Supplier<Sink<R>> sinkBuilder : sinkBuilders) {
+                stage = sinkBuilder.get();
+            }
+        } else {
+            // 构建链
+            for (int i = sinkBuilders.size() - 1; i >= 0; i--) {
+                Supplier<Sink<R>> supplier = sinkBuilders.get(i);
+                // 执行get方法才会出发链的构建
+                stage = supplier.get();
+            }
         }
         Sink<R> finalStage = stage;
 
@@ -91,6 +98,6 @@ public class ReferenceChain<R, Out> {
         // filter -> map -> for each
         chain.filter(item -> item > 10)
                 .map(item -> item * 2)
-                .forEach(list, System.out::println);
+                .forEach(list, System.out::println, true);
     }
 }
