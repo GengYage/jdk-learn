@@ -13,7 +13,7 @@ import java.util.function.Supplier;
  * @author: Yage
  * @create: 2022-07-27 18:39
  */
-public class ReferenceChain<R, Out> {
+public class ReferenceChain<R, OUT> {
 
     // skin chain
     private final List<Supplier<Sink<R>>> sinkBuilders = new ArrayList<>();
@@ -22,17 +22,17 @@ public class ReferenceChain<R, Out> {
     private final AtomicReference<Sink<?>> sinkReference = new AtomicReference<>();
 
     //filter
-    public ReferenceChain<R, Out> filter(Predicate<R> predicate) {
+    public ReferenceChain<R, OUT> filter(Predicate<R> predicate) {
         // 添加新节点 只有 test通过才会执行preSink的操作
         sinkBuilders.add(() -> {
-            Sink<Out> prevSink = (Sink<Out>) sinkReference.get();
+            Sink<OUT> prevSink = (Sink<OUT>) sinkReference.get();
 
             // 不改变值类型，输入什么输出什么类型
-            Sink.ChainedReference<R, Out> currentSink = new Sink.ChainedReference<R, Out>(prevSink) {
+            Sink.ChainedReference<R, OUT> currentSink = new Sink.ChainedReference<R, OUT>(prevSink) {
                 @Override
                 public void accept(R out) {
                     if (predicate.test(out)) {
-                        downstream.accept((Out) out);
+                        downstream.accept((OUT) out);
                     }
                 }
             };
@@ -45,12 +45,12 @@ public class ReferenceChain<R, Out> {
         return this;
     }
 
-    public ReferenceChain<R, Out> map(Function<R, Out> function) {
+    public ReferenceChain<R, OUT> map(Function<R, OUT> function) {
         sinkBuilders.add(() -> {
-            Sink<Out> prevSink = (Sink<Out>) sinkReference.get();
+            Sink<OUT> prevSink = (Sink<OUT>) sinkReference.get();
 
             // 改变值类型输入R,输出OUT
-            Sink.ChainedReference<R, Out> currSink = new Sink.ChainedReference<R, Out>(prevSink) {
+            Sink.ChainedReference<R, OUT> currSink = new Sink.ChainedReference<R, OUT>(prevSink) {
                 @Override
                 public void accept(R in) {
                     downstream.accept(function.apply(in));
