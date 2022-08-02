@@ -10,6 +10,17 @@ repositories {
 }
 
 dependencies {
+    // https://mvnrepository.com/artifact/org.ow2.asm/asm
+    implementation group: 'org.ow2.asm', name: 'asm', version: '9.3'
+    // https://mvnrepository.com/artifact/org.ow2.asm/asm-commons
+    implementation group: 'org.ow2.asm', name: 'asm-commons', version: '9.3'
+    // https://mvnrepository.com/artifact/org.ow2.asm/asm-util
+    implementation group: 'org.ow2.asm', name: 'asm-util', version: '9.3'
+    // https://mvnrepository.com/artifact/org.ow2.asm/asm-tree
+    implementation group: 'org.ow2.asm', name: 'asm-tree', version: '9.3'
+    // https://mvnrepository.com/artifact/org.ow2.asm/asm-analysis
+    implementation group: 'org.ow2.asm', name: 'asm-analysis', version: '9.3'
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
