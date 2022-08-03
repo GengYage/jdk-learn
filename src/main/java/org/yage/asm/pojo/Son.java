@@ -16,5 +16,7 @@ public class Son extends Father{
         Father father = new Son();
         System.out.println(father.str);
         father.say();
+        Son son = new Son();
+        son.hello();
     }
 }

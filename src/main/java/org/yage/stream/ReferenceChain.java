@@ -78,7 +78,7 @@ public class ReferenceChain<R, OUT> {
             // 构建链
             for (int i = sinkBuilders.size() - 1; i >= 0; i--) {
                 Supplier<Sink<R>> supplier = sinkBuilders.get(i);
-                // 执行get方法才会出发链的构建
+                // 执行get方法才会触发链的构建
                 stage = supplier.get();
             }
         }

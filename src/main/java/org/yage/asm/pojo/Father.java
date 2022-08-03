@@ -10,4 +10,8 @@ public class Father {
     protected void say() {
         System.out.println("I am father.");
     }
+
+    protected void hello() {
+        System.out.println("hello");
+    }
 }
