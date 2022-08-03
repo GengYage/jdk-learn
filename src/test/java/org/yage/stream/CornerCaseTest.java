@@ -1,4 +1,4 @@
-package com.yage.stream;
+package org.yage.stream;
 
 import org.junit.jupiter.api.Test;
 
