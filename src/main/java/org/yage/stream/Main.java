@@ -28,6 +28,9 @@ public class Main {
 
         System.out.println(Optional.<A>ofNullable(null).map(A::getName).isPresent());
 
+
+
+
     }
 
 
