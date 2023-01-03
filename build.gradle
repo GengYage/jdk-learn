@@ -25,7 +25,7 @@ dependencies {
     implementation group: 'org.ow2.asm', name: 'asm-tree', version: '9.3'
     // https://mvnrepository.com/artifact/org.ow2.asm/asm-analysis
     implementation group: 'org.ow2.asm', name: 'asm-analysis', version: '9.3'
-    implementation 'cn.hutool:hutool-all:5.8.9'
+    implementation 'cn.hutool:hutool-all:5.8.11'
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.14.0'
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
@@ -37,7 +37,7 @@ dependencies {
      * 52 1.9.5
      * master 1.9.6*/
     // https://mvnrepository.com/artifact/org.jasypt/jasypt
-    implementation group: 'org.jasypt', name: 'jasypt', version: '1.9.5'
+    implementation group: 'org.jasypt', name: 'jasypt', version: '1.9.6'
 
     // https://mvnrepository.com/artifact/org.projectlombok/lombok
     compileOnly 'org.projectlombok:lombok:1.18.24'

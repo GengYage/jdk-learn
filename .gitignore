@@ -3,3 +3,6 @@ build
 **.index
 **.hprof
 java_pid*
+.gradle
+**.lock
+src/main/java/org/yage/passwd
