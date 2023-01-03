@@ -7,6 +7,11 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    maven {
+        allowInsecureProtocol = true
+        url = 'https://10.0.0.69:8081/nexus/content/groups/public/'
+    }
+    mavenLocal()
 }
 
 dependencies {
@@ -27,6 +32,13 @@ dependencies {
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.14.0'
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.14.0'
+
+    /**
+     * 52 1.9.5
+     * master 1.9.6*/
+    // https://mvnrepository.com/artifact/org.jasypt/jasypt
+    implementation group: 'org.jasypt', name: 'jasypt', version: '1.9.5'
+
     // https://mvnrepository.com/artifact/org.projectlombok/lombok
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'

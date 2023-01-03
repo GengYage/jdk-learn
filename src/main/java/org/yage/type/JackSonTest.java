@@ -13,7 +13,7 @@ import java.util.Map;
 public class JackSonTest {
     public static void main(String[] args) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, String> value = objectMapper.readValue("{}", new TypeReference<Map<String, String>>() {
+        Map<String, Integer> value = objectMapper.readValue("{}", new TypeReference<Map<String, Integer>>() {
         });
 
         System.out.println(value);
