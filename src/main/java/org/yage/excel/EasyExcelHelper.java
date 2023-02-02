@@ -1,5 +1,6 @@
 package org.yage.excel;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.excel.EasyExcelFactory;
 import com.alibaba.excel.enums.CellExtraTypeEnum;
@@ -65,8 +66,7 @@ public class EasyExcelHelper<T> {
                 return;
             }
 
-            String name = getName(firstRowIndex, lastRowIndex,data);
-
+            String name = data.get(firstRowIndex).get(0);
 
             log.info(name);
             if (StrUtil.isNotBlank(name)) {
@@ -83,6 +83,10 @@ public class EasyExcelHelper<T> {
     private void fillData(Map<String, Map<String, List<BigDecimal>>> nameProjectTimes, String name, List<Map<Integer, String>> data, Integer firstRowIndex, Integer lastRowIndex) {
         for (int i = firstRowIndex; i <= lastRowIndex; i++) {
             Map<Integer, String> row = data.get(i);
+
+            if (CollectionUtil.isEmpty(row)) {
+               continue;
+            }
 
             Map<String, List<BigDecimal>> projectTimes = nameProjectTimes.computeIfAbsent(name, key -> new HashMap<>());
 

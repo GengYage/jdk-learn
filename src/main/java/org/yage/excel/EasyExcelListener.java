@@ -4,7 +4,6 @@ import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.enums.CellExtraTypeEnum;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.excel.metadata.CellExtra;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -31,6 +30,8 @@ public class EasyExcelListener extends AnalysisEventListener<Map<Integer, String
      */
     private final List<CellExtra> extraMergeInfoList = new ArrayList<>();
 
+    private Integer index = 0;
+
 
     public EasyExcelListener(Integer headRowNumber) {
         this.headRowNumber = headRowNumber;
@@ -38,6 +39,12 @@ public class EasyExcelListener extends AnalysisEventListener<Map<Integer, String
 
     @Override
     public void invoke(Map<Integer, String> data, AnalysisContext context) {
+        Integer rowIndex = context.readRowHolder().getRowIndex();
+        if (rowIndex -1 == index) {
+            dataList.add(null);
+            index++;
+        }
+        index++;
         dataList.add(data);
     }
 
