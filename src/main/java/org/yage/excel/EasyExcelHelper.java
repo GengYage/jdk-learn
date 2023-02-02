@@ -57,16 +57,8 @@ public class EasyExcelHelper<T> {
             // 开始行
             Integer firstRowIndex = cellExtra.getFirstRowIndex();
             Integer lastRowIndex = cellExtra.getLastRowIndex();
-
-            if (lastRowIndex >= data.size()) {
-                lastRowIndex = data.size() - 1;
-            }
-
-            if (firstRowIndex >= data.size()) {
-                return;
-            }
-
-            String name = data.get(firstRowIndex).get(0);
+            Integer rowIndex = cellExtra.getRowIndex();
+            String name = data.get(rowIndex).get(0);
 
             log.info(name);
             if (StrUtil.isNotBlank(name)) {

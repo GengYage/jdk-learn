@@ -40,9 +40,14 @@ public class EasyExcelListener extends AnalysisEventListener<Map<Integer, String
     @Override
     public void invoke(Map<Integer, String> data, AnalysisContext context) {
         Integer rowIndex = context.readRowHolder().getRowIndex();
-        if (rowIndex -1 == index) {
-            dataList.add(null);
-            index++;
+
+        // 我服了easyexcel,空白行没有回调,导致一大堆行没有回调
+        if (rowIndex >= index) {
+            for (int i = 0; i < rowIndex - index; i++) {
+                dataList.add(null);
+                index++;
+            }
+
         }
         index++;
         dataList.add(data);

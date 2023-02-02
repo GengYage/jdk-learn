@@ -30,15 +30,18 @@ public class ManDayCounter {
             throw new RuntimeException(e);
         }
         // 参数 文件流，sheet页号，头行号
-        Map<String, Map<String, List<BigDecimal>>> listData = helper.getList(fileInputStream, 2, 0);
+        Map<String, Map<String, List<BigDecimal>>> listData = helper.getList(fileInputStream, 3, 0);
         validate(listData);
     }
 
 
     private static void validate(Map<String, Map<String, List<BigDecimal>>> listData) throws JsonProcessingException {
+        // log.info("原始数据:{}", OBJECT_MAPPER.writeValueAsString(listData));
+
         if (CollectionUtil.isEmpty(listData)) {
             return;
         }
+
         Map<String, Map<String, String>> manDay = new HashMap<>();
         listData.forEach((k, v) -> {
             Map<String, String> projectManDay = manDay.computeIfAbsent(k, a -> new HashMap<>());
