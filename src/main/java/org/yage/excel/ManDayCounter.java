@@ -6,10 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.file.Files;
 import java.util.*;
 
 /**
@@ -20,23 +21,29 @@ import java.util.*;
 public class ManDayCounter {
     public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
+    public static final Map<Integer, List<String>> resultPeople = new HashMap<>();
+
     public static void main(String[] args) throws JsonProcessingException {
-        EasyExcelHelper<Map<Integer, String>> helper = new EasyExcelHelper<>();
-        File file = new File("/home/isbest/Downloads/映射2022-基础服务组.xlsx");
-        FileInputStream fileInputStream = null;
-        try {
-            fileInputStream = new FileInputStream(file);
-        } catch (FileNotFoundException e) {
+        for (int i = 2; i < 100; i++) {
+           forEach(i);
+        }
+
+        log.info("可能填错的人: {}", OBJECT_MAPPER.writeValueAsString(resultPeople));
+    }
+
+    private static void forEach(int sheetIndex) {
+        try (InputStream io = Files.newInputStream(new File("/Users/it/Downloads/映射2022-基础服务组.xlsx").toPath())) {
+            EasyExcelHelper<Map<Integer, String>> helper = new EasyExcelHelper<>();
+            Map<String, Map<String, List<BigDecimal>>> listData = helper.getList(io, sheetIndex, 0);
+            validate(listData, sheetIndex);
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        // 参数 文件流，sheet页号，头行号
-        Map<String, Map<String, List<BigDecimal>>> listData = helper.getList(fileInputStream, 3, 0);
-        validate(listData);
     }
 
 
-    private static void validate(Map<String, Map<String, List<BigDecimal>>> listData) throws JsonProcessingException {
-        // log.info("原始数据:{}", OBJECT_MAPPER.writeValueAsString(listData));
+    private static void validate(Map<String, Map<String, List<BigDecimal>>> listData, int sheetIndex) throws JsonProcessingException {
+        log.info("原始数据:{}", OBJECT_MAPPER.writeValueAsString(listData));
 
         if (CollectionUtil.isEmpty(listData)) {
             return;
@@ -65,7 +72,6 @@ public class ManDayCounter {
 
         List<String> failPeople = new ArrayList<>(12);
 
-        Set<String> re = new HashSet<>();
         Map<String, List<String>> validateMap = new HashMap<>();
 
         manDay.forEach((k, v) -> {
@@ -76,12 +82,18 @@ public class ManDayCounter {
 
             BigDecimal bigDecimal = new BigDecimal(sum).setScale(3, RoundingMode.HALF_UP);
 
-           validateMap.computeIfAbsent(bigDecimal.toString(), a -> new ArrayList<>())
-                   .add(k);
+            validateMap.computeIfAbsent(bigDecimal.toString(), a -> new ArrayList<>())
+                    .add(k);
         });
 
         // list 中多的人为正确的
         Collection<List<String>> values = validateMap.values();
+
+        // 都在一个集合就是没有填错的
+        if (values.size() == 1) {
+            return;
+        }
+
         // 多数为正确的
         int maxSize = values.stream()
                 .map(List::size)
@@ -90,10 +102,12 @@ public class ManDayCounter {
 
         for (List<String> value : values) {
             if (value.size() < maxSize) {
-               failPeople.addAll(value);
+                failPeople.addAll(value);
             }
         }
 
+        List<String> strings = resultPeople.computeIfAbsent(sheetIndex, k -> new ArrayList<>());
+        strings.addAll(failPeople);
         log.info("可能填错的人: {}", OBJECT_MAPPER.writeValueAsString(failPeople));
     }
 }

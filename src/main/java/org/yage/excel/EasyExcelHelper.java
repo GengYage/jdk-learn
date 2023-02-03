@@ -9,7 +9,6 @@ import com.alibaba.excel.support.ExcelTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -34,12 +33,6 @@ public class EasyExcelHelper<T> {
                     .doRead();
         } catch (Exception e) {
             log.error(e.getMessage());
-        } finally {
-            try {
-                inputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         }
 
         List<CellExtra> extraMergeInfoList = listener.getExtraMergeInfoList();
@@ -60,6 +53,11 @@ public class EasyExcelHelper<T> {
             Integer rowIndex = cellExtra.getRowIndex();
             String name = data.get(rowIndex).get(0);
 
+            // 兼容小可爱
+            if (lastRowIndex > data.size()) {
+                lastRowIndex = data.size() - 1;
+            }
+
             log.info(name);
             if (StrUtil.isNotBlank(name)) {
                 fillData(nameProjectTimes, name, data, firstRowIndex, lastRowIndex);
@@ -77,7 +75,7 @@ public class EasyExcelHelper<T> {
             Map<Integer, String> row = data.get(i);
 
             if (CollectionUtil.isEmpty(row)) {
-               continue;
+                continue;
             }
 
             Map<String, List<BigDecimal>> projectTimes = nameProjectTimes.computeIfAbsent(name, key -> new HashMap<>());
@@ -92,18 +90,5 @@ public class EasyExcelHelper<T> {
             }
         }
     }
-
-
-    private String getName(Integer start, Integer end, List<Map<Integer, String>> data) {
-        String name = null;
-        for (int i = start; i <= end; i++) {
-            name = data.get(i).get(0);
-            if (StrUtil.isNotBlank(name)) {
-                return name;
-            }
-        }
-        return null;
-    }
-
 }
 
