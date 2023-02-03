@@ -5,8 +5,12 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.read.builder.ExcelReaderBuilder;
 import com.alibaba.excel.read.metadata.ReadSheet;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -23,7 +27,25 @@ import java.util.*;
  */
 @Slf4j
 public class ManDayCounter {
+    static class NullKeySerializer extends StdSerializer<Object> {
+        protected NullKeySerializer(Class<Object> t) {
+            super(t);
+        }
+        public NullKeySerializer() {
+            this(null);
+        }
+        @Override
+        public void serialize(Object nullKey, JsonGenerator jsonGenerator, SerializerProvider unused)
+                throws IOException {
+            jsonGenerator.writeFieldName("");
+        }
+    }
     public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    static {
+        OBJECT_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        OBJECT_MAPPER.getSerializerProvider().setNullKeySerializer(new NullKeySerializer());
+    }
 
     public static final Map<String, List<String>> resultPeople = new HashMap<>();
 
@@ -31,7 +53,7 @@ public class ManDayCounter {
 
     public static void main(String[] args) throws JsonProcessingException {
 
-        File file = new File("/Users/it/Downloads/映射2022-基础服务组.xlsx");
+        File file = new File("/Users/it/Downloads/映射2021-基础服务组.xlsx");
         ExcelReaderBuilder excelReaderBuilder = EasyExcel.read(file);
         ExcelReader excelReader = excelReaderBuilder.build();
         List<ReadSheet> sheets = excelReader.excelExecutor().sheetList();
@@ -42,17 +64,17 @@ public class ManDayCounter {
         }
 
 
-        for (int i = 2; i < 100; i++) {
-            forEach(i);
-        }
+//        for (int i = 3; i < 100; i++) {
+//            forEach(i);
+//        }
 
-//        forEach(36);
+        forEach(2);
 
         log.info("可能填错的人: {}", OBJECT_MAPPER.writeValueAsString(resultPeople));
     }
 
     private static void forEach(int sheetIndex) {
-        try (InputStream io = Files.newInputStream(new File("/Users/it/Downloads/映射2022-基础服务组.xlsx").toPath())) {
+        try (InputStream io = Files.newInputStream(new File("/Users/it/Downloads/映射2021-基础服务组.xlsx").toPath())) {
             EasyExcelHelper<Map<Integer, String>> helper = new EasyExcelHelper<>();
             Map<String, Map<String, List<BigDecimal>>> listData = helper.getList(io, sheetIndex, 0);
             validate(listData, sheetIndex);

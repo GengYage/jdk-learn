@@ -47,11 +47,20 @@ public class EasyExcelHelper<T> {
 
         Map<String, Map<String, List<BigDecimal>>> nameProjectTimes = new HashMap<>();
         extraMergeInfoList.forEach(cellExtra -> {
+
+            if (cellExtra == null) {
+                return;
+            }
+
             // 开始行
             Integer firstRowIndex = cellExtra.getFirstRowIndex();
             Integer lastRowIndex = cellExtra.getLastRowIndex();
             Integer rowIndex = cellExtra.getRowIndex();
-            String name = data.get(rowIndex).get(0);
+            Map<Integer, String> cellMap = data.get(rowIndex);
+            String name = null;
+            if (CollectionUtil.isNotEmpty(cellMap)) {
+                name = cellMap.get(0);
+            }
 
             // 兼容小可爱
             if (lastRowIndex > data.size()) {
