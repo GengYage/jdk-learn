@@ -1,6 +1,10 @@
 package org.yage.excel;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelReader;
+import com.alibaba.excel.read.builder.ExcelReaderBuilder;
+import com.alibaba.excel.read.metadata.ReadSheet;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -21,12 +25,28 @@ import java.util.*;
 public class ManDayCounter {
     public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    public static final Map<Integer, List<String>> resultPeople = new HashMap<>();
+    public static final Map<String, List<String>> resultPeople = new HashMap<>();
+
+    public static final Map<Integer, String> sheetNameMap = new HashMap<>();
 
     public static void main(String[] args) throws JsonProcessingException {
-        for (int i = 2; i < 100; i++) {
-           forEach(i);
+
+        File file = new File("/Users/it/Downloads/映射2022-基础服务组.xlsx");
+        ExcelReaderBuilder excelReaderBuilder = EasyExcel.read(file);
+        ExcelReader excelReader = excelReaderBuilder.build();
+        List<ReadSheet> sheets = excelReader.excelExecutor().sheetList();
+        for (ReadSheet sheet : sheets) {
+            excelReader.read(sheet);
+
+            sheetNameMap.put(sheet.getSheetNo(), sheet.getSheetName());
         }
+
+
+        for (int i = 2; i < 100; i++) {
+            forEach(i);
+        }
+
+//        forEach(36);
 
         log.info("可能填错的人: {}", OBJECT_MAPPER.writeValueAsString(resultPeople));
     }
@@ -106,7 +126,7 @@ public class ManDayCounter {
             }
         }
 
-        List<String> strings = resultPeople.computeIfAbsent(sheetIndex, k -> new ArrayList<>());
+        List<String> strings = resultPeople.computeIfAbsent(sheetNameMap.get(sheetIndex), k -> new ArrayList<>());
         strings.addAll(failPeople);
         log.info("可能填错的人: {}", OBJECT_MAPPER.writeValueAsString(failPeople));
     }
