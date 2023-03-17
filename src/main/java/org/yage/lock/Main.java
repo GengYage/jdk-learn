@@ -1,8 +1,6 @@
 package org.yage.lock;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
@@ -85,14 +83,11 @@ public class Main {
             } catch (InterruptedException e) {
                 System.out.println("在sleep捕获到了异常");
             }
-            for (; ; ) {
-                if (Thread.currentThread().isInterrupted()) {
-                    System.out.println("中断标记位未被清空");
-                    break;
-                } else {
-                    System.out.println("中断标记位被清空");
-                    break;
-                }
+
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("中断标记位未被清空");
+            } else {
+                System.out.println("中断标记位被清空");
             }
         });
 
