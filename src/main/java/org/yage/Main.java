@@ -1,19 +1,12 @@
 package org.yage;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import org.yage.utils.PinyinUtil;
 
 public class Main {
     public static void main(String[] args) {
-        Map<String, Object> map = new HashMap<>();
-        LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>();
-        linkedHashMap.put("a","b");
-
-        Long a = null;
-        map.get("aa");
-        map.remove("aa");
-        System.out.println(a);
-        System.out.println(map);
+        System.out.println(PinyinUtil.getPinYin("狄勇"));
+        System.out.println(PinyinUtil.getPinYin("李春莲"));
+        System.out.println(PinyinUtil.getPinYin("秦昆伦"));
+        System.out.println(PinyinUtil.getPinYin("李传超"));
     }
 }
