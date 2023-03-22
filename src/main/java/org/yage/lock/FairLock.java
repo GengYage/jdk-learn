@@ -1,5 +1,6 @@
 package org.yage.lock;
 
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -9,6 +10,14 @@ import java.util.concurrent.locks.ReentrantLock;
 public class FairLock {
     public static void main(String[] args) {
 
+        String a = null;
+        System.out.println(a);
+        testRefer(a);
+        System.out.println(a);
+    }
+
+    public static void testRefer(String a) {
+        a = "hello";
     }
 
     public static void testFairLock() throws InterruptedException {
