@@ -19,7 +19,39 @@ public class ConditionMain {
 
 
     public static void main(String[] args) {
+//        testWaitList();
+        testCondition();
+    }
 
+    public static void testCondition() {
+        long deadLine = TimeUnit.SECONDS.toNanos(1) + System.nanoTime();
+        Runnable runnable = () -> {
+            for (; ; ) {
+                lock.lock();
+                long waitTime = deadLine - System.nanoTime();
+                try {
+                    log.info("{}", Thread.currentThread().getName());
+                    // 会经历释放锁和获取锁
+                    condition.signal();
+                    // 判断是否到了deadline
+                    if (waitTime < 0) {
+                        break;
+                    } else {
+                        condition.await();
+                    }
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                } finally {
+                    lock.unlock();
+                }
+            }
+        };
+        new Thread(runnable, "A").start();
+        new Thread(runnable, "B").start();
+    }
+
+
+    public static void testWaitList() {
         Runnable runnable = () -> {
             for (; ; ) {
                 try {
