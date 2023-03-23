@@ -35,7 +35,7 @@ public class ConditionMain {
 
                 // 只有A 有唤醒能力
                 if (Thread.currentThread().getName().equals("A")) {
-                    condition.signal();
+                    condition.signalAll();
                 }
 
                 try {
