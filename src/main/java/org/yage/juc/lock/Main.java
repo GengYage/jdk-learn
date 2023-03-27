@@ -1,4 +1,4 @@
-package org.yage.lock;
+package org.yage.juc.lock;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;

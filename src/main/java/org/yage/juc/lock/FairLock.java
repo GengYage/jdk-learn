@@ -1,4 +1,4 @@
-package org.yage.lock;
+package org.yage.juc.lock;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;

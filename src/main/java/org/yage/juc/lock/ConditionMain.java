@@ -1,4 +1,4 @@
-package org.yage.lock;
+package org.yage.juc.lock;
 
 import lombok.extern.slf4j.Slf4j;
 
