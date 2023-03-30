@@ -85,4 +85,22 @@ public class XyUtils {
         Files.write(Paths.get("/Users/it/Documents/update.sql"), updateSql, StandardCharsets.UTF_8);
         Files.write(Paths.get("/Users/it/Documents/rollback.sql"), unDoUpdateSql, StandardCharsets.UTF_8);
     }
+
+    public static void splitList() {
+        ArrayList<Long> toUserIds = new ArrayList<>();
+        for (long i = 0L; i < 90L; i++) {
+            toUserIds.add(i);
+        }
+
+        int size = toUserIds.size();
+        int startIndex = 0;
+        int endIndex = 0;
+        do {
+            size -= 10;
+            endIndex += 10;
+            List<Long> subList = toUserIds.subList(startIndex, Math.min(endIndex, toUserIds.size()));
+            startIndex += 10;
+            System.out.println(subList);
+        } while (size > 0);
+    }
 }
