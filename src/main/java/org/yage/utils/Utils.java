@@ -10,8 +10,7 @@ import java.util.stream.Stream;
  * @create: 2023-04-07 17:30
  */
 public class Utils {
-    static class StringGenerate implements Supplier<String> {
-
+    public static class StringGenerate implements Supplier<String> {
         @Override
         public String get() {
             StringBuilder sb = new StringBuilder();
