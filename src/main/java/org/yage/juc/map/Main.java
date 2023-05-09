@@ -33,6 +33,7 @@ public class Main {
         System.out.println(Integer.numberOfLeadingZeros(4 << -1));
 
         testVolatile();
+        map.contains(null);
     }
 
     /**

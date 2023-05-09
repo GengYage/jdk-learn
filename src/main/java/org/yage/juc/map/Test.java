@@ -13,6 +13,8 @@ import java.util.stream.Stream;
  */
 public class Test {
     // 扩容阈值为6
+    private int baseCount = 0;
+    private int index = 1;
 
     public static void main(String[] args) {
         ConcurrentHashMap<String, String> MAP = new ConcurrentHashMap<>(4);
@@ -29,6 +31,10 @@ public class Test {
             count++;
             MAP.put(s, s);
         }
+
+        new Thread(() -> {
+            boolean aa = MAP.contains("AA");
+        });
 
     }
 }
