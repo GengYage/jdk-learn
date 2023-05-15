@@ -19,6 +19,7 @@ public class Main {
         System.out.println(spread("key".hashCode()) + " " + Integer.toBinaryString(spread("key".hashCode())));
         print(106079>>>16);
         print(HASH_BITS);
+        System.out.println((1<<16) -1);
     }
 
 

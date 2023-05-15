@@ -24,13 +24,8 @@ public class Main {
 
 
     public static void main(String[] args) {
-        A a = new A();
-
-        System.out.println(Optional.<A>ofNullable(null).map(A::getName).isPresent());
-
-
-
-
+        @SuppressWarnings("all")
+        boolean present = Optional.<A>ofNullable(null).map(A::getName).isPresent();
     }
 
 
