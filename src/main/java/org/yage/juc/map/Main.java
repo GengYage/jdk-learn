@@ -1,6 +1,5 @@
 package org.yage.juc.map;
 
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -30,20 +29,9 @@ public class Main {
         System.out.println((sc(16) + 2) + " " + Integer.toBinaryString(sc(16) + 2));
         System.out.println((sc(16) + 65535) + " " + Integer.toBinaryString(sc(16) + 65535));
 
-        System.out.println(0b0010 & 0b0011);
-        System.out.println(0b0100 & 0b0011);
-        System.out.println(0b0010 & 0b0011);
-        System.out.println(0b0011 & 0b0011);
+        System.out.println(MAXIMUM_CAPACITY >>> 3 / 8);
 
-        System.out.println(Integer.toBinaryString(0b0100 + 0b0100));
-        System.out.println(Integer.toBinaryString(0b0100 + 0b0100 + 0b0100));
-        System.out.println(Integer.toBinaryString(0b0100 + 0b0100 + 0b0100 + 0b0100));
-        System.out.println(Integer.toBinaryString(~0b0010));
-
-        System.out.println(tableSizeFor(16));
-        System.out.println(tableSizeFor(24 + 1));
-        System.out.println(tableSizeFor(1));
-
+//        deadLock();
     }
     private static final int MAXIMUM_CAPACITY = 1 << 30;
     // sentinel
@@ -57,4 +45,14 @@ public class Main {
         n |= n >>> 16;
         return (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
     }
+
+    public static void deadLock() {
+        ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+        // 经典bug, 死锁
+        map.computeIfAbsent("AaAa", key ->
+                map.computeIfAbsent("BBBB", key2 -> 42));
+
+        System.out.println(map.size());
+    }
+
 }
