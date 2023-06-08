@@ -6,8 +6,7 @@ package org.yage.juc.map;
  */
 public class Misc {
     public static void main(String[] args) {
-
-        System.out.println(System.currentTimeMillis());
-        System.out.println("1685432088740");
+        System.out.println(Integer.toBinaryString(0x7fffffff));
+        System.out.println(Integer.toBinaryString(0x7fffffff).length());
     }
 }
